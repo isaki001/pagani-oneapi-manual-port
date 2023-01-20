@@ -1,0 +1,34 @@
+instructions to run
+0. Get interactive session on devcloud
+    qsub -I -l nodes=1:gpu:ppn=2 -d .
+
+1. Copy gpuintegration repository
+
+2. move to the gpuintegration directory
+cd gpuintegration-repository-location 
+
+3. Create a build directory
+mkdir build
+
+4. cd to the build directory you just made
+
+5. module load mkl cmake
+
+6. Create makefile
+cmake ../ -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=dpcpp -DMKL_DIR=/glob/development-tools/versions/oneapi/2022.1.2/oneapi/mkl/2022.0.2/lib/cmake/mkl/ -DPAGANI_DIR=${PAGANI_DIR}
+
+7. If the above command was successful you should now have a makefile created from cmake
+
+8. Compile 
+    make
+
+9. If attempting to execute on Iris GPU (wasn't working in my case),you must export the following variables
+export OverrideDefaultFP64Settings=1
+export IGC_EnableDPEmulation=1
+
+10. Execute any demo
+./oneAPI/demos/oneAPI_Genz3_3D
+
+11. Run test cases
+ctest
+
